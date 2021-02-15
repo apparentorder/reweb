@@ -3,7 +3,7 @@
 Works great!
 
 - Needs some PostgreSQL for sessions and config (Aurora Serverless works)
-- Might need internet connectivity for data sources (e.g. endpoints for Timestream, Cloudwatch, ... unless private endpoints)
+- Might need internet connectivity (NAT) for data sources (e.g. endpoints for Timestream, Cloudwatch, ... unless private endpoints)
 
 # Environment
 
