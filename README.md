@@ -71,9 +71,9 @@ TODO: full setup walk-through with apigw, lambda, route53, acm
 # Applications
 
 The following applications have been tested and are known to work:
-- Grafana
-- Kibana
-- Wordpress
+- [Wordpress](https://github.com/apparentorder/reweb/blob/main/doc/app/wordpress.md)
+- [Grafana](https://github.com/apparentorder/reweb/blob/main/doc/app/grafana.md)
+- [Kibana](https://github.com/apparentorder/reweb/blob/main/doc/app/kibana.md)
 
 The following applications are known NOT to work:
 - pgAdmin (session management)
@@ -97,3 +97,8 @@ Third, while Lambda can deploy from container images, it's not actually running 
 file system is read-only (except for `/tmp` and `/mnt`). Writes to, say, `/var/run/foo.pid` will fail. Any such paths will need to be adjusted.
 
 Another limitation: API Gateway supports HTTPS only -- no unencrypted HTTP. This shouldn't be a problem nowadays; in fact, it's usually welcome.
+
+One more thing to keep in mind is the web application's startup time. Every time when Lambda needs to spawn an additional instance to handle a
+request, this request will have to wait until that instance is ready. This is next to nothing for many languages like PHP and Go (1-3 seconds is not
+very noticable), but can be annoying (Kibana/Node takes ~10 seconds to start) or it can flat out stop the show (e.g. Confluence/Java takes about
+half a day to start). All subsequent requests that can be handled by a "warm" instance can complete in mere milliseconds, of course.
