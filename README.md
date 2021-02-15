@@ -44,7 +44,7 @@ corresponding HTTP request to the web application.
 
 #### Application Server
 
-This is simply web application, as it would have been deployed per usual.
+This is simply the web application, as it would have been deployed per usual.
 
 # Setup
 
