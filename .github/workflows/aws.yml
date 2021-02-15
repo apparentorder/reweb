@@ -19,7 +19,7 @@ jobs:
         aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
 
     - name: build-binary
-      run:
+      run: |
         go build -o reweb -tags netgo -ldflags -s
         ls -la
         
