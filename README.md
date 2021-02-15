@@ -1,4 +1,4 @@
-# reweb
+# re:Web
 re:Web enables classic web applications to run on AWS Lambda.
 
 re:Web interfaces with the Lambda Runtime API and provides a translation layer from API Gateway requests to the HTTP service running inside the container.
