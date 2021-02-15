@@ -75,6 +75,8 @@ The following applications have been tested and are known to work:
 - [Grafana](https://github.com/apparentorder/reweb/blob/main/doc/app/grafana.md)
 - [Kibana](https://github.com/apparentorder/reweb/blob/main/doc/app/kibana.md)
 
+Click on the links for setup details.
+
 The following applications are known NOT to work:
 - pgAdmin (session management)
 
