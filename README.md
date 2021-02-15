@@ -4,7 +4,7 @@ re:Web enables classic web applications to run on AWS Lambda.
 re:Web interfaces with the Lambda Runtime API. It translates API Gateway requests back into HTTP requests and passes them to the web application.
 
 # But Why?
-Traditionally, web applications run on a VM or in container deployments. These run continuously around the clock, which means
+Traditional web applications need to be deployed on VMs or in containers. These run continuously around the clock, which means
 you have to reserve (pay) CPU and RAM capacity continuously. Every millisecond that your service is not busy handling a web request, it is wasting resources.
 Typical web applications spend more than 90% of their CPU time idle. That's a lot of waste!
 Finely tuned and well-operated high-traffic applications may see much better utilization, but even then there is a lot of headroom (waste).
