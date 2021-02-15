@@ -1,5 +1,9 @@
 name: Build & Deploy to Amazon ECR
-on: [push]
+on:
+  push:
+    paths: 
+      - '**.go'
+      - 'Dockerfile'
 
 jobs:
   deploy:
