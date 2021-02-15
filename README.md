@@ -12,7 +12,10 @@ Finely tuned and well-operated high-traffic applications may see much better uti
 With re:Web and AWS Lambda, you can practically eliminate this waste: Resources are billed only as they are actually used for each individual web
 request, down to the millisecond.
 
-This architecture brings a lot of other benefits:
+This can mean significant savings for any usage pattern, but of course it's especially awesome for applications that are not used around the
+clock, like Kibana, Grafana, Confluence etc.
+
+And this architecture brings a lot of other benefits for free:
 - Seamless auto-scaling without any configuration
 - Full high-availability across all Availability Zones
 - Easy code updates
@@ -35,8 +38,9 @@ It is used simply as a dumb HTTP proxy and forwards all requests to Lambda. Note
 #### re:Web
 
 The re:Web binary is a small piece of Go code that is added to the original web application's container image.
-It is the Lambda's entrypoint. On startup, it starts the actual web application. It handles communication with the Lambda Runtime API, and for each
-incoming request (Lambda invocation), it will make a corresponding HTTP request to the web application.
+It is the Lambda's entrypoint. On startup, it starts the actual web application, and waits until it becomes available.
+It handles communication with the Lambda Runtime API, and for each incoming request (Lambda invocation), it will make a
+corresponding HTTP request to the web application.
 
 #### Application Server
 
@@ -67,7 +71,29 @@ TODO: full setup walk-through with apigw, lambda, route53, acm
 # Applications
 
 The following applications have been tested and are known to work:
-- ...
+- Grafana
+- Kibana
+- Wordpress
+
+The following applications are known NOT to work:
+- pgAdmin (session management)
 
 # Limitations
-- ...
+
+Due to the potentially high and fluctuating concurrency of Lambda, re:Web can only work with applications that behave properly in such settings.
+Any application that needs to keep *local* state, like session information, will not work. While some such applications can be coerced by using
+a load balancer's "sticky session" feature, this workaround will not help on Lambda.
+
+Lambda itself has several very important limitations.
+
+First, any Lambda response cannot exceed 6 MB. That means any web request resulting in a larger response will fail. Common examples are static content like huge
+images and enormous Javascript files. Sometimes using `$REWEB_FORCE_GZIP` helps, but that's not guaranteed.
+
+Second, the Lambda environment fully halts execution while there is no request in progress. That means there cannot be any background activity.
+This is perfectly fine when the code path is purely request based, for example with PHP. Anything with backgrounds threads, like Java or Node, may
+trip because it's being stopped and resumed all the time. In practice, this seems to cause no harm, but it must be kept in mind.
+
+Third, while Lambda can deploy from container images, it's not actually running a container as we know it. One important difference is that *all* the
+file system is read-only (except for `/tmp` and `/mnt`). Writes to, say, `/var/run/foo.pid` will fail. Any such paths will need to be adjusted.
+
+Another limitation: API Gateway supports HTTPS only -- no unencrypted HTTP. This shouldn't be a problem nowadays; in fact, it's usually welcome.
