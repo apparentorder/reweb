@@ -1,5 +1,7 @@
 # Overview
 
+Works pretty great!
+
 - Needs some MySQL for sessions etc. (Aurora Serverless works)
 - Needs EFS as the Wordpress directory needs to be shared and writable
 - EFS should map all access to UID/GID 33/33 (corresponds to `www-data` in the Wordpress image)
@@ -8,6 +10,15 @@
 - Lambda with 512 MB memory seemst to be fine and fast enough (usually <150 MB)
   - using 3072 MB (one full vCPU) is slightly faster but not worth it (most time is spent waiting for the database)
 - Initial Wordpress setup cannot be done from Lambda (the Wordpress image tries to un`tar` the whole thing)
+  - Make sure the following two things are set in `wp-config.php`:
+    ```
+    define('WP_MEMORY_LIMIT', '450M');
+    
+    /* HTTPS detection via proxy headers */
+    if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+        $_SERVER['HTTPS'] = 'on';
+    }
+    ```
 
 # Dockerfile
 
