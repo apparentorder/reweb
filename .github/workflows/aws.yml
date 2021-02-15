@@ -20,6 +20,7 @@ jobs:
 
     - name: build-binary
       run: |
+        go get
         go build -o reweb -tags netgo -ldflags -s
         ls -la
         
