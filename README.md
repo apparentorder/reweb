@@ -22,7 +22,7 @@ And this architecture brings a lot of other benefits for free:
 - No maintenance required
 - Automatic replacement of failed containers
 
-# How it works
+# How it Works
 
 High level overview:
 
