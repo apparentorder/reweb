@@ -1,0 +1,35 @@
+name: Build & Deploy to Amazon ECR
+on: [push]
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      run:
+        aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
+
+    - name: build-binary
+      run:
+        go build -o reweb -tags netgo -ldflags -s
+        ls -la
+        
+    - name: build-image
+      env:
+        ECR_REPOSITORY: public.ecr.aws/g2o8x4n0/reweb
+        IMAGE_TAG: ${{ github.sha }}
+      run: |
+        docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
+        docker tag      $ECR_REPOSITORY:$IMAGE_TAG $ECR_REPOSITORY:latest
+        docker push $ECR_REPOSITORY:$IMAGE_TAG 
+        docker push $ECR_REPOSITORY:latest
+        echo "::set-output name=image::$ECR_REPOSITORY:$IMAGE_TAG"
