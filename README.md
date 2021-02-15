@@ -88,15 +88,18 @@ a load balancer's "sticky session" feature, this workaround will not help on Lam
 
 Lambda itself has several very important limitations.
 
-First, any Lambda response cannot exceed 6 MB. That means any web request resulting in a larger response will fail. Common examples are static content like huge
+- Any Lambda response cannot exceed 6 MB. That means any web request resulting in a larger response will fail. Common examples are static content like huge
 images and enormous Javascript files. Sometimes using `$REWEB_FORCE_GZIP` helps, but that's not guaranteed.
 
-Second, the Lambda environment fully halts execution while there is no request in progress. That means there cannot be any background activity.
+- The Lambda environment fully halts execution while there is no request in progress. That means there cannot be any background activity.
 This is perfectly fine when the code path is purely request based, for example with PHP. Anything with backgrounds threads, like Java or Node, may
 trip because it's being stopped and resumed all the time. In practice, this seems to cause no harm, but it must be kept in mind.
 
-Third, while Lambda can deploy from container images, it's not actually running a container as we know it. One important difference is that *all* the
+- While Lambda can deploy from container images, it's not actually running a container as we know it. One important difference is that *all* the
 file system is read-only (except for `/tmp` and `/mnt`). Writes to, say, `/var/run/foo.pid` will fail. Any such paths will need to be adjusted.
+
+- Lambda does not allow root-level privileges, therefore it's not possible to use well-known ports -- any web application that comes with a default
+port below 1024 needs to be reconfigured.
 
 Another limitation: API Gateway supports HTTPS only -- no unencrypted HTTP. This shouldn't be a problem nowadays; in fact, it's usually welcome.
 
