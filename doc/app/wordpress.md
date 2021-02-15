@@ -5,6 +5,8 @@
 - EFS should map all access to UID/GID 33/33 (corresponds to `www-data` in the Wordpress image)
 - Needs private VPC connectivity for EFS (and Aurora Serverless, if used)
   - mostly works without Internet connectivity (NAT), but some Admin functions will fail and the Dashboard will load slowly
+- Lambda with 512 MB memory seemst to be fine and fast enough (usually <150 MB)
+  - using 3072 MB (one full vCPU) is slightly faster but not worth it (most time is spent waiting for the database)
 - Initial Wordpress setup cannot be done from Lambda (the Wordpress image tries to un`tar` the whole thing)
 
 # Dockerfile
