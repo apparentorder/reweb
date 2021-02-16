@@ -82,9 +82,13 @@ The following applications are known NOT to work:
 
 # Limitations
 
+#### Session management
+
 Due to the potentially high and fluctuating concurrency of Lambda, re:Web can only work with applications that behave properly in such settings.
 Any application that needs to keep *local* state, like session information, will not work. While some such applications can be coerced by using
 a load balancer's "sticky session" feature, this workaround will not help on Lambda.
+
+#### Lambda limitations
 
 Lambda itself has several very important limitations.
 
@@ -101,9 +105,17 @@ file system is read-only (except for `/tmp` and `/mnt`). Writes to, say, `/var/r
 - Lambda does not allow root-level privileges, therefore it's not possible to use well-known ports -- any web application that comes with a default
 port below 1024 needs to be reconfigured.
 
-Another limitation: API Gateway supports HTTPS only -- no unencrypted HTTP. This shouldn't be a problem nowadays; in fact, it's usually welcome.
+#### HTTPS
+
+API Gateway supports HTTPS only -- no unencrypted HTTP. This shouldn't be a problem nowadays; in fact, it's usually welcome.
+
+#### Startup Time
 
 One more thing to keep in mind is the web application's startup time. Every time when Lambda needs to spawn an additional instance to handle a
-request, this request will have to wait until that instance is ready. This is next to nothing for many languages like PHP and Go (1-3 seconds is not
-very noticable), but can be annoying (Kibana/Node takes ~10 seconds to start) or it can flat out stop the show (e.g. Confluence/Java takes about
-half a day to start). All subsequent requests that can be handled by a "warm" instance can complete in mere milliseconds, of course.
+request, this request will have to wait until that instance is ready.
+
+This is next to nothing for many languages like PHP and Go (1-3 seconds at most -- not very noticable), but can be annoying (Kibana/Node takes
+~10 seconds to start) or it can flat out stop the show (e.g. Confluence/Java takes about half a day to start). All subsequent requests handled by a "warm" instance can complete in mere milliseconds, of course.
+
+This can be worked around with using Lambda Provisioned Concurrency, but that voids the Lambda cost advantage. It might still be preferable to a
+container deployment for availability reasons though; "it depends".
