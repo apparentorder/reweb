@@ -73,14 +73,18 @@ TODO: full setup walk-through with apigw, lambda, route53, acm
 # Applications
 
 The following applications have been tested and are known to work:
-- [Wordpress](https://github.com/apparentorder/reweb/blob/main/doc/app/wordpress.md)
-- [Grafana](https://github.com/apparentorder/reweb/blob/main/doc/app/grafana.md)
-- [Kibana](https://github.com/apparentorder/reweb/blob/main/doc/app/kibana.md)
+- [Wordpress](doc/app/wordpress.md)
+- [Grafana](doc/app/grafana.md)
+- [Kibana](doc/app/kibana.md)
 
 Click on the links for setup details.
 
 The following applications are known NOT to work:
 - pgAdmin (session management)
+
+# More Data
+
+There's some [high-traffic load test data](doc/loadtest.md) for Wordpress; it includes some napkin math for potential costs.
 
 # Limitations
 
