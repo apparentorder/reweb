@@ -44,7 +44,9 @@ corresponding HTTP request to the web application.
 
 #### Application Server
 
-This is simply the web application, as it would have been deployed per usual.
+This is simply the web application, as it would have been deployed per usual. Most software images come with some web server built-in, e.g. Apache or nginx,
+and/or they provide their own HTTP server which would serve traffic directly to the public in a VM or container deployment. re:Web acts as a proxy to
+this HTTP server.
 
 # Setup
 
