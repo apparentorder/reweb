@@ -90,7 +90,7 @@ Due to the potentially high and fluctuating concurrency of Lambda, re:Web can on
 Any application that needs to keep *local* state, like session information, will not work. While some such applications can be coerced by using
 a load balancer's "sticky session" feature, this workaround will not help on Lambda.
 
-#### Lambda limitations
+#### Lambda Limitations
 
 Lambda itself has several very important limitations.
 
@@ -107,9 +107,11 @@ file system is read-only (except for `/tmp` and `/mnt`). Writes to, say, `/var/r
 - Lambda does not allow root-level privileges, therefore it's not possible to use well-known ports -- any web application that comes with a default
 port below 1024 needs to be reconfigured.
 
-#### HTTPS
+#### API Gateway limitations
 
 API Gateway supports HTTPS only -- no unencrypted HTTP. This shouldn't be a problem nowadays; in fact, it's usually welcome.
+
+API Gateway's maximum timeout is 30 seconds, so any request longer than this will fail.
 
 #### Startup Time
 
@@ -122,7 +124,19 @@ This is next to nothing for many languages like PHP and Go (1-3 seconds at most 
 This can be worked around with using Lambda Provisioned Concurrency, but that voids the Lambda cost advantage. It might still be preferable to a
 container deployment for availability reasons though; "it depends".
 
+# Status
+
+This project should be considered experimental. Maybe don't use it in a high-profile production site just yet. :-)
+
 # Related Work
 
 [Serverless WordPress on AWS Lambda](https://keita.blog/2020/06/29/wordpress-on-aws-lambda-efs-edition/) modifies Wordpress to run in Lambda,
 giving basically the same results as re:Web. The article has some additional hints regarding S3 plug-ins.
+
+# Contact
+
+For suggestions, bugs, pull requests etc. please use Github.
+
+For everything else: I'm trying to get used to Twitter as [@apparentorder](https://twitter.com/apparentorder).
+Or try legacy message delivery using apparentorder@neveragain.de.
+Also I'm old enough to use IRC -- I'm hiding in #reweb on Freenode.
