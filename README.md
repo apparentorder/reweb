@@ -121,3 +121,8 @@ This is next to nothing for many languages like PHP and Go (1-3 seconds at most 
 
 This can be worked around with using Lambda Provisioned Concurrency, but that voids the Lambda cost advantage. It might still be preferable to a
 container deployment for availability reasons though; "it depends".
+
+# Related Work
+
+[Serverless WordPress on AWS Lambda](https://keita.blog/2019/06/27/serverless-wordpress-on-aws-lambda/) modifies Wordpress to run in Lambda,
+giving basically the same results as re:Web. The article has some additional hints regarding S3 plug-ins.
