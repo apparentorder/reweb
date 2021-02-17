@@ -124,6 +124,12 @@ This is next to nothing for many languages like PHP and Go (1-3 seconds at most 
 This can be worked around with using Lambda Provisioned Concurrency, but that voids the Lambda cost advantage. It might still be preferable to a
 container deployment for availability reasons though; "it depends".
 
+#### Lambda VPC Interface Idle
+
+To quote an [AWS blog post](https://aws.amazon.com/de/blogs/compute/announcing-improved-vpc-networking-for-aws-lambda-functions/):
+"If Lambda functions in an account go idle for *consecutive weeks*, the service will reclaim the unused Hyperplane
+resources and so very infrequently invoked functions may still see longer cold-start times" (emphasis added)
+
 # Status
 
 This project should be considered experimental. Maybe don't use it in a high-profile production site just yet. :-)
