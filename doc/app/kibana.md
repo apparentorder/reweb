@@ -46,7 +46,7 @@ ENTRYPOINT ["/reweb"]
 #### Rationale
 
 - Kibana needs to write some data, but it doesn't have to persist -- therefore `/tmp` is fine
-- During startup, Kibana will accept HTTP requests, but will answer them with something like "HTTP 500 Not ready yet", therefore re:Web needs to wait
+- During startup, Kibana will accept HTTP requests, but will answer them with `503 Service Unavailable`, therefore re:Web needs to wait for a HTTP 302 first
 
 # References
 
