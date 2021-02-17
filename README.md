@@ -124,5 +124,5 @@ container deployment for availability reasons though; "it depends".
 
 # Related Work
 
-[Serverless WordPress on AWS Lambda](https://keita.blog/2019/06/27/serverless-wordpress-on-aws-lambda/) modifies Wordpress to run in Lambda,
+[Serverless WordPress on AWS Lambda](https://keita.blog/2020/06/29/wordpress-on-aws-lambda-efs-edition/) modifies Wordpress to run in Lambda,
 giving basically the same results as re:Web. The article has some additional hints regarding S3 plug-ins.
