@@ -134,7 +134,7 @@ like `https://c1zy14kkai.execute-api.eu-central-1.amazonaws.com/wp-admin/setup-c
 
 Click "Let's go" and follow the setup. Don't mind the ugly look, it's because of the `http://` URLs.
 
-Enter your database information as usual.
+Enter your database information as usual. (Note and rest assured that you actually *do* transmit these data over HTTPS/TLS)
 
 ***IMPORTANT BREAK HERE***
 
