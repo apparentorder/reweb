@@ -123,7 +123,7 @@ In the Route53 Console,
 
 If you're using your own DNS name, you may need to wait a few minutes until the DNS entry works.
 
-If you're not using your own name, or if you don't want to want, open the API Gateway "Invoke URL" noted earlier.
+If you're not using your own name, or if you don't want to wait, open the API Gateway "Invoke URL" noted earlier.
 Wordpress will start, but it will send you a Redirect to http:// (no TLS), which will cause your browser to throw an
 error!
 
