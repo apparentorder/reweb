@@ -51,21 +51,21 @@ On your EC2 instance, do this:
 
 # Create Lambda Function
 
-- In the Lambda Console, "Create function"
-  - ... from "Container image"
-  - Name "wpdemo"
-  - Click "Browse images" to select your "wpdemo" repository and image
-  - Make sure that "Create new role ..." is selected under "Change default execution role"
-  - Hit "Create function"
-  - In "Basic settings", up the RAM to 512 MB and the Timeout to 30 seconds
-  - Also in "Basic settings", use the "View the wpdemo-role-foo" link at the bottom to open the IAM console
-    - Hit "Attach policies" and select the "AWSLambdaVPCAccessExecutionRole"
-    - close the tab to return to the Lambda settings page
-  - Edit VPC settings and place the Lambda function in your correct VPC
-    -  be sure to use the correct "private" subnets if you want NAT connectivity
-  - "Add file system" to connect the EFS
-    - select your file system and the "wpdemo" access point
-    - "Local mount path" is /mnt/wordpress
+In the Lambda Console, "Create function":
+- ... from "Container image"
+- Name "wpdemo"
+- Click "Browse images" to select your "wpdemo" repository and image
+- Make sure that "Create new role ..." is selected under "Change default execution role"
+- Hit "Create function"
+- In "Basic settings", up the RAM to 512 MB and the Timeout to 30 seconds
+- Also in "Basic settings", use the "View the wpdemo-role-foo" link at the bottom to open the IAM console
+  - Hit "Attach policies" and select the "AWSLambdaVPCAccessExecutionRole"
+  - close the tab to return to the Lambda settings page
+- Edit VPC settings and place the Lambda function in your correct VPC
+  -  be sure to use the correct "private" subnets if you want NAT connectivity
+- "Add file system" to connect the EFS
+  - select your file system and the "wpdemo" access point
+  - "Local mount path" is /mnt/wordpress
 
 # Custom Domain Name Setup
 
@@ -100,23 +100,24 @@ First off, we'll request the TLS certificate for our chosen name:
 
 Feel free to skip this section if you don't want a custom domain name. You can always add it later.
 
-- Still in API Gateway, on the left, select "Custom domain names" and hit "Create"
-  - "Domain name" is `wpdemo.cmdu.de`
-  - Leave the "Endpoint type" at "Regional" and select the correct "ACM certificate"
-  - "Create domain name"
-  - Note the resulting "API Gateway domain name" and "Hosted zone ID"
-  - Click the "API mappings" tab and "Configure API mapping" and there "Add new mapping"
-    - select your "wpdemo" API and the "$default" Stage
-    - don't enter a Path
-    - "Save"
-- In the Route53 Console,
-  - select "Hosted Zones" and your correct domain name
-  - "Create record"
-    - Enter the correct name ("wpdemo")
-    - enable the "Alias" toggle (top right corner)
-    - In "Route traffic to", select "Alias to API Gateway API", select region and the domain name from before
-    - "Evaluate target health" to off (XXX depends on site usage?)
-    - ... "Create records"
+Still in API Gateway, on the left, select "Custom domain names" and hit "Create"
+- "Domain name" is `wpdemo.cmdu.de`
+- Leave the "Endpoint type" at "Regional" and select the correct "ACM certificate"
+- "Create domain name"
+- Note the resulting "API Gateway domain name" and "Hosted zone ID"
+- Click the "API mappings" tab and "Configure API mapping" and there "Add new mapping"
+  - select your "wpdemo" API and the "$default" Stage
+  - don't enter a Path
+  - "Save"
+
+In the Route53 Console,
+- select "Hosted Zones" and your correct domain name
+- "Create record"
+  - Enter the correct name ("wpdemo")
+  - enable the "Alias" toggle (top right corner)
+  - In "Route traffic to", select "Alias to API Gateway API", select region and the domain name from before
+  - "Evaluate target health" to off (XXX depends on site usage?)
+  - ... "Create records"
 
 # Drumroll!
 
