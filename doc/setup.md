@@ -105,6 +105,10 @@ Feel free to skip this section if you don't want a custom domain name. You can a
   - Leave the "Endpoint type" at "Regional" and select the correct "ACM certificate"
   - "Create domain name"
   - Note the resulting "API Gateway domain name" and "Hosted zone ID"
+  - Click the "API mappings" tab and "Configure API mapping" and there "Add new mapping"
+    - select your "wpdemo" API and the "$default" Stage
+    - don't enter a Path
+    - "Save"
 - In the Route53 Console,
   - select "Hosted Zones" and your correct domain name
   - "Create record"
