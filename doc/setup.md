@@ -14,7 +14,9 @@ We'll assume the following things are already there:
 - some EC2 instance 
   - with Docker installed
   - with access to the same VPC you'll be using
-  - with an EC2 Instance Role that allows to use ECR (you can use the Managed Policy "AmazonEC2ContainerRegistryPowerUser")
+  - with an EC2 Instance Role that ...
+    - allows to use ECR (e.g. Managed Policy "AmazonEC2ContainerRegistryPowerUser")
+    - allows EFS Clients (e.g. Managed Policy "AmazonElasticFileSystemClientReadWriteAccess")
 
 # Create the EFS
 
