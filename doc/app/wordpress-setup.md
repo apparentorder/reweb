@@ -39,7 +39,7 @@ On your EC2 instance, do this:
 - `aws ecr create-repository --repository-name wpdemo` -- note the `registryUri`!
 - `mkdir wpdemo`
 - `cd wpdemo`
-- `${EDITOR-vi} Dockerfile` -- insert the Dockerfile from [the Wordpress docs](app/wordpress.md)
+- `${EDITOR-vi} Dockerfile` -- insert the Dockerfile from [the Wordpress docs](wordpress.md)
 - `docker build -t 123456789012.dkr.ecr.eu-central-1.amazonaws.com/wpdemo:latest .` -- note the `.` at the end; replace your AWS Account ID and Region, so it matches your `registryUri`
 - `docker push     123456789012.dkr.ecr.eu-central-1.amazonaws.com/wpdemo:latest` (replace again)
 
