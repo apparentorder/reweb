@@ -26,8 +26,7 @@ This amounts to ~40 requests per second, or ~2,400 requests per minute, or ~3.5M
 
 Lambda concurrency was surprisingly low, between 6 and 9 over the whole test.
 
-If we were to extrapolate that to a full *day* of traffic, we'd have ~3.5M requests (maybe 500.000 page impressions? --
-many German newspapers have less than that!).
+If we were to extrapolate that to a full *day* of traffic, we'd have ~3.5M requests per day.
 
 This test traffic averages to ~40 milliseconds of Lambda compute per request (front page is ~250msec and static assets are more like 5msec each).
 
@@ -41,12 +40,14 @@ For API Gateway:
 
 So there you have an extremly high-available high-traffic Wordpress site with superb response times at ~$5 per day.
 
-That is ***a huge buttload of traffic that most Wordpress installations will never see***, not even close. And for every request
-less than that, you'll pay less.
+Keep in mind: That is ***a huge buttload of traffic that most Wordpress installations will never see***. Not even close.
 
-And also keep in mind that this is ***without* any caching by a browser or by any CDN***. If there'd been some CDN, pretty
+And for every request less than that, you'll pay less. That's the awesome thing about AWS Lambda.
+
+And also keep in mind that this is ***without any caching by a browser or by any CDN***. If there'd been some CDN, pretty
 much all static requests would never hit the Lambda function, reducing the request count to maybe ***one fifth*** of
 the numbers above.
 
-Also note we're not counting AWS egress traffic or RDS/Aurora costs. The database tends to be bored anyway -- for the above
-test, Aurora Serverless with just 1 ACU was idling at 10-15% CPU. EFS cost for a few dozen MBs is negligible (below $0.000/day).
+Please note we're *not* counting AWS egress traffic or RDS/Aurora costs. Those would be the same for a traditional Wordpress deployment.
+The database tends to be bored anyway -- for the above test, Aurora Serverless with just 1 ACU was idling at 10-15% CPU.
+And EFS cost for a few dozen MBs is negligible (below $0.000/day).
