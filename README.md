@@ -135,7 +135,8 @@ Many! In no particular order:
 - Provide Terraform and/or Cloudformation packages for one-click deployment
 - Find a good way to provide secret data as environment variables (from Secrets Manager or SSM Parameter Store, but without impacting cold-start time)
 - Test and document many many more applications!
-- ...
+- Get a proper Custom Alias for the re:Web repository in the AWS Public Container Registry -- apparently it's not that easy...
+- Your ideas...?
 
 Contributions welcome, of course! See below for "Contact".
 
