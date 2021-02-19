@@ -10,7 +10,7 @@ We'll assume the following things are already there:
 - VPC (possibly with a NAT Gateway or NAT instance for connectiviy, though not strictly required)
 - Possibly a Security Group for all this (we'll use the VPC default SG here)
 - MySQL Database (e.g. RDS or Aurora Serverless)
-- Custom domain in Route53 (only needed if you want the site under your own domain name)
+- Custom domain / hosted zone in Route53 (only needed if you want the site under your own domain name)
 - some EC2 instance 
   - with Docker installed
   - with access to the same VPC you'll be using
@@ -29,7 +29,7 @@ We'll assume the following things are already there:
   - for "POSIX user", put 33 as both UID and GID
   - same for "Root directory creation permissions", the "mode" is 0755
 - Click the created Access Point to view the details
-- Click "Attach" and note the `mount` suggested command under "Using the EFS mount helper"
+- Click "Attach" and note the suggested `mount` command under "Using the EFS mount helper"
 
 # Build the Docker Image
 
@@ -106,7 +106,7 @@ Still in API Gateway, on the left, select "Custom domain names" and hit "Create"
 - "Domain name" is `wpdemo.cmdu.de`
 - Leave the "Endpoint type" at "Regional" and select the correct "ACM certificate"
 - "Create domain name"
-- Note the resulting "API Gateway domain name" and "Hosted zone ID"
+- Note the resulting "API Gateway domain name"
 - Click the "API mappings" tab and "Configure API mapping" and there "Add new mapping"
   - select your "wpdemo" API and the "$default" Stage
   - don't enter a Path
@@ -118,7 +118,6 @@ In the Route53 Console,
   - Enter the correct name ("wpdemo")
   - enable the "Alias" toggle (top right corner)
   - In "Route traffic to", select "Alias to API Gateway API", select region and the domain name from before
-  - "Evaluate target health" to off (XXX depends on site usage?)
   - ... "Create records"
 
 # Drumroll!
@@ -132,9 +131,9 @@ error!
 In the browser's address bar, replace `http://` with `https://` (it should now look something
 like `https://c1zy14kkai.execute-api.eu-central-1.amazonaws.com/wp-admin/setup-config.php`).
 
-Click "Let's go" and follow the setup. Don't mind the ugly look, it's because of the `http://` URLs.
+Click "Let's go" and follow the setup. Don't mind the ugly look, this will be fixed soon.
 
-Enter your database information as usual. (Note and rest assured that you actually *do* transmit these data over HTTPS/TLS)
+Enter your database information as usual. (Know and rest assured: You actually *do* transmit these data over HTTPS/TLS)
 
 ***IMPORTANT BREAK HERE***
 
@@ -153,3 +152,7 @@ Return to browser and then "Run the installation". In the "Welcome" page, enter 
 In "Settings" > "General", adjust your "Wordpress Address" and "Site Address" to match your custom DNS name, if any.
 
 Done!
+
+# Homework
+
+Implement all this in Terraform / CloudFormation. 🙃
