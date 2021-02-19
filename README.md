@@ -153,8 +153,10 @@ something beautiful, with some changes in the involved AWS Services. Let's talk!
 
 # Contact
 
-For suggestions, bugs, pull requests etc. please use Github.
+For bug reports, pull requests and other issues please use Github.
 
-For everything else: I'm trying to get used to Twitter as [@apparentorder](https://twitter.com/apparentorder). DMs are open.
-Or try legacy message delivery using apparentorder@neveragain.de.
-Also I'm old enough to use IRC -- Find me in #reweb on Freenode.
+For everything else:
+- I'm trying to get used to Twitter as [@apparentorder](https://twitter.com/apparentorder). DMs are open.
+- Sometimes I peek into the og-aws Slack, as "appo"
+- I'm old enough to prefer IRC -- find me in #reweb on Freenode.
+- Last resort: Try legacy message delivery to apparentorder@neveragain.de.
