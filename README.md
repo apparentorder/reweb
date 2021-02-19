@@ -3,6 +3,8 @@ re:Web enables classic web applications to run on AWS Lambda.
 
 re:Web interfaces with the Lambda Runtime API. It translates API Gateway requests back into HTTP requests and passes them to the web application.
 
+Due to this generic mechanism, it works with *any* web application that can be load-balanced properly.
+
 # But Why?
 Traditional web applications need to be deployed on VMs or in containers. These run continuously around the clock, which means
 you have to reserve (pay) CPU and RAM capacity continuously. Every millisecond that your service is not busy handling a web request, it is wasting resources.
@@ -21,6 +23,30 @@ And this architecture brings a lot of other benefits for free:
 - Easy code updates
 - No maintenance required
 - Automatic replacement of failed containers
+
+# Applications
+
+Because re:Web behaves like a HTTP proxy, it can potentially work with many, many applications!
+
+It requires zero code changes.
+
+All you need to do is to add the re:Web binary and use it as the `ENTRYPOINT`.
+In some cases, some trivial changes to the application's `Dockerfile` are necessary, to make the application suitable
+for the AWS Lambda execution environment.
+
+The following applications have been tested and are known to work:
+- Wordpress ([setup reference](doc/app/wordpress.md)) ([full setup walk-through](doc/app/wordpress-setup.md))
+- Grafana ([setup reference](doc/app/grafana.md))
+- Kibana ([setup reference](doc/app/kibana.md))
+
+Click on the links for setup details.
+
+The following applications are known NOT to work:
+- pgAdmin (session management)
+
+# More Data
+
+There's some [high-traffic load test data](doc/loadtest.md) for Wordpress; it includes some napkin math for potential AWS costs.
 
 # How it Works
 
@@ -47,44 +73,6 @@ corresponding HTTP request to the web application.
 This is simply the web application, as it would have been deployed per usual. Most software images come with some web server built-in, e.g. Apache or nginx,
 and/or they provide their own HTTP server which would serve traffic directly to the public in a VM or container deployment. re:Web acts as a proxy to
 this HTTP server.
-
-# Setup
-
-In many cases, the web application's container image will work without modification. We merely need to add the re:Web binary
-and add a few environment variables. For example:
-
-```
-FROM public.ecr.aws/g2o8x4n0/reweb:latest as reweb
-
-FROM grafana/grafana
-COPY --from=reweb /reweb /reweb
-
-ENV REWEB_APPLICATION_EXEC	/run.sh
-ENV REWEB_APPLICATION_PORT	3000
-ENV REWEB_FORCE_GZIP	True
-
-ENTRYPOINT ["/reweb"]
-```
-
-The resulting image is ready for deployment to Lambda.
-
-TODO: full setup walk-through with apigw, lambda, route53, acm
-
-# Applications
-
-The following applications have been tested and are known to work:
-- [Wordpress](doc/app/wordpress.md)
-- [Grafana](doc/app/grafana.md)
-- [Kibana](doc/app/kibana.md)
-
-Click on the links for setup details.
-
-The following applications are known NOT to work:
-- pgAdmin (session management)
-
-# More Data
-
-There's some [high-traffic load test data](doc/loadtest.md) for Wordpress; it includes some napkin math for potential costs.
 
 # Limitations
 
@@ -138,15 +126,35 @@ resources and so very infrequently invoked functions may still see longer cold-s
 
 This project should be considered experimental. Maybe don't use it in a high-profile production site just yet. :-)
 
+# Future Ideas
+
+Many! In no particular order:
+- Work around the Lambda 6 MB response limitation by dynamically offloading such responses to S3
+- Implement re:Web for AWS Application Loadbalancer (as alternative to API Gateway), because the former becomes cheaper at some level of traffic
+- Provide ready-to-use images of popular applications
+- Provide Terraform and/or Cloudformation packages for one-click deployment
+- Find a good way to provide secret data as environment variables (from Secrets Manager or SSM Parameter Store, but without impacting cold-start time)
+- Test and document many many more applications!
+- ...
+
+Contributions welcome, of course! See below for "Contact".
+
 # Related Work
 
-[Serverless WordPress on AWS Lambda](https://keita.blog/2020/06/29/wordpress-on-aws-lambda-efs-edition/) modifies Wordpress to run in Lambda,
+- [Serverless WordPress on AWS Lambda](https://keita.blog/2020/06/29/wordpress-on-aws-lambda-efs-edition/) modifies Wordpress to run in Lambda,
 giving basically the same results as re:Web. The article has some additional hints regarding S3 plug-ins.
+
+- "My Dream of Truly Serverless", a blog post I have yet to write
+
+# Are you AWS?
+
+I believe the whole concept here is gold. But shoehorning it into Lambda requests and translating JSON/HTTP back and forth is hacky. This could be made into
+something beautiful, with some changes in the involved AWS Services. Let's talk!
 
 # Contact
 
 For suggestions, bugs, pull requests etc. please use Github.
 
-For everything else: I'm trying to get used to Twitter as [@apparentorder](https://twitter.com/apparentorder).
+For everything else: I'm trying to get used to Twitter as [@apparentorder](https://twitter.com/apparentorder). DMs are open.
 Or try legacy message delivery using apparentorder@neveragain.de.
-Also I'm old enough to use IRC -- I'm hiding in #reweb on Freenode.
+Also I'm old enough to use IRC -- Find me in #reweb on Freenode.
