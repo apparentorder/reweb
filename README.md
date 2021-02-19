@@ -17,12 +17,11 @@ request, down to the millisecond.
 This can mean significant savings for any usage pattern, but of course it's especially awesome for applications that are not used around the
 clock, like Kibana, Grafana, Confluence etc.
 
-And this architecture brings a lot of other benefits for free:
+This architecture has some key benefits:
+- It's *significantly* cheaper
 - Seamless auto-scaling without any configuration
 - Full high-availability across all Availability Zones
 - Easy code updates
-- No maintenance required
-- Automatic replacement of failed instances
 
 # Applications
 
