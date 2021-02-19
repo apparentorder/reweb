@@ -41,11 +41,11 @@ For API Gateway:
 
 So there you have an extremly high-available high-traffic Wordpress site with superb response times at ~$5 per day.
 
-That is a *huge lot* of traffic that most Wordpress installations will never see, not even close. And for every request
+That is ***a huge buttload of traffic that most Wordpress installations will never see***, not even close. And for every request
 less than that, you'll pay less.
 
-And also keep in mind that this is *without* any caching by a browser or by any CDN. If there'd been some CDN, pretty
-much all static requests would never hit the Lambda function, reducing the request count to maybe *one fifth* of
+And also keep in mind that this is ***without* any caching by a browser or by any CDN***. If there'd been some CDN, pretty
+much all static requests would never hit the Lambda function, reducing the request count to maybe ***one fifth*** of
 the numbers above.
 
 Also note we're not counting AWS egress traffic or RDS/Aurora costs. The database tends to be bored anyway -- for the above
