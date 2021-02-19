@@ -22,7 +22,7 @@ And this architecture brings a lot of other benefits for free:
 - Full high-availability across all Availability Zones
 - Easy code updates
 - No maintenance required
-- Automatic replacement of failed containers
+- Automatic replacement of failed instances
 
 # Applications
 
