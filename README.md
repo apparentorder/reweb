@@ -148,6 +148,8 @@ resources and so very infrequently invoked functions may still see longer cold-s
 - [Serverless WordPress on AWS Lambda](https://keita.blog/2020/06/29/wordpress-on-aws-lambda-efs-edition/) modifies Wordpress to run in Lambda,
 giving basically the same results as re:Web. The article has some additional hints regarding S3 plug-ins.
 
+- [serverlessish](https://github.com/glassechidna/serverlessish), a project that is ["eerily similar"](https://twitter.com/__steele/status/1363020663615758339). It really is.
+
 - "My Dream of Truly Serverless", a blog post I have yet to write
 
 # Are you AWS?
