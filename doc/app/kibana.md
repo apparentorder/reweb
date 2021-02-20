@@ -1,11 +1,14 @@
 # Overview
 
-Works nicely once warm.
+Works nicely once warm, for viewing data.
 
 Lambda cold start takes <= 10 seconds.
 The first cold start (first communication with an Elastic) seems to time out once or twice, but after that, Kibana runs smoothly.
 
 Simple usage clocks in at ~420 MB RAM usage per request, but I've given it 4 GB of RAM for more CPU speed.
+
+⚠️ Any Kibana background threads will *not* work reliably, as the Lambda execution environment is halted when it is not processing
+any request. This might impact Node Discovery, for example. It has only been tested with a trivial single-node Elastic deployment so far.
 
 # Environment
 
