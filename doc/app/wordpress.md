@@ -23,7 +23,7 @@ Works pretty great!
 # Dockerfile
 
 ```
-FROM public.ecr.aws/g2o8x4n0/reweb as reweb
+FROM public.ecr.aws/apparentorder/reweb as reweb
 
 FROM wordpress:5.6 as wordpress
 COPY --from=reweb /reweb /reweb

@@ -31,7 +31,7 @@ the same Key to access shared session data). It's just an arbitrary string, see
 # Dockerfile
 
 ```
-FROM public.ecr.aws/g2o8x4n0/reweb as reweb
+FROM public.ecr.aws/apparentorder/reweb as reweb
 
 FROM docker.elastic.co/kibana/kibana:7.10.2
 COPY --from=reweb /reweb /reweb

@@ -23,7 +23,7 @@ GF_SERVER_ROOT_URL	https://grafana.example.com
 # Dockerfile
 
 ```
-FROM public.ecr.aws/g2o8x4n0/reweb as reweb
+FROM public.ecr.aws/apparentorder/reweb as reweb
 
 FROM grafana/grafana
 COPY --from=reweb /reweb /reweb
