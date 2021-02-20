@@ -1,9 +1,12 @@
 # Overview
 
-Works great!
+Works great for viewing data!
 
 - Needs some PostgreSQL for sessions and config (Aurora Serverless works)
 - Might need internet connectivity (NAT) for data sources (e.g. endpoints for Timestream, Cloudwatch, ... unless private endpoints)
+
+⚠️ Any Grafana background threads will *not* work reliably, as the Lambda execution environment is halted when it is not processing
+any request (Grafana's alerting for example).
 
 # Environment
 
