@@ -18,10 +18,17 @@ This can mean significant savings for any usage pattern, but of course it's espe
 clock, like Kibana, Grafana, Confluence etc.
 
 This architecture has some key benefits:
-- It's *significantly* cheaper
+- It's *significantly* cheaper for many workloads
 - Seamless auto-scaling without any configuration
 - Full high-availability across all Availability Zones
 - Easy code updates
+
+# Status
+
+This is experimental / a proof of concept. Maybe don't use it in a high-profile production site just yet. :-)
+
+But it works surprisingly well. I'd like to evolve this idea and push the envelope a little, to see what's possible.
+The most imporant next step is to test and document more applications that work this way.
 
 # Applications
 
@@ -120,10 +127,6 @@ container deployment for availability reasons though; "it depends".
 To quote an [AWS blog post](https://aws.amazon.com/de/blogs/compute/announcing-improved-vpc-networking-for-aws-lambda-functions/):
 "If Lambda functions in an account go idle for *consecutive weeks*, the service will reclaim the unused Hyperplane
 resources and so very infrequently invoked functions may still see longer cold-start times" (emphasis added)
-
-# Status
-
-This project should be considered experimental. Maybe don't use it in a high-profile production site just yet. :-)
 
 # Future Ideas
 
