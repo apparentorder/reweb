@@ -131,12 +131,13 @@ resources and so very infrequently invoked functions may still see longer cold-s
 # Future Ideas
 
 Many! In no particular order:
+- Test and document many many more applications!
 - Work around the Lambda 6 MB response limitation by dynamically offloading such responses to S3
 - Implement re:Web for AWS Application Loadbalancer (as alternative to API Gateway), because the former becomes cheaper at some level of traffic
 - Provide ready-to-use images of popular applications
 - Provide Terraform and/or Cloudformation packages for one-click deployment
 - Find a good way to provide secret data as environment variables (from Secrets Manager or SSM Parameter Store, but without impacting cold-start time)
-- Test and document many many more applications!
+- Find ways to give more "breathing room" for background threads ([ideas](https://www.reddit.com/r/aws/comments/lnjo6z/run_classic_web_applications_on_aws_lambda_and/go2fuqb/?utm_source=reddit&utm_medium=web2x&context=3)
 - Get a proper Custom Alias for the re:Web repository in the AWS Public Container Registry -- apparently it's not that easy...
 - Your ideas...?
 
