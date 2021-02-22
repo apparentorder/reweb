@@ -5,7 +5,7 @@ re:Web interfaces with the Lambda Runtime API. It translates API Gateway request
 
 Due to this generic mechanism, it works with *any* web application that can be load-balanced properly.
 
-# But Why?
+## But Why?
 Traditional web applications need to be deployed on VMs or in containers. These run continuously around the clock, which means
 you have to reserve (pay) CPU and RAM capacity continuously. Every millisecond that your service is not busy handling a web request, it is wasting resources.
 Typical web applications spend more than 90% of their CPU time idle. That's a lot of waste!
@@ -23,14 +23,14 @@ This architecture has some key benefits:
 - Full high-availability across all Availability Zones
 - Easy code updates
 
-# Status
+## Status
 
 This is experimental / a proof of concept. Maybe don't use it in a high-profile production site just yet. :-)
 
 But it works surprisingly well. I'd like to evolve this idea and push the envelope a little, to see what's possible.
 The most imporant next step is to test and document more applications that work this way.
 
-# Applications
+## Applications
 
 Because re:Web behaves like a HTTP proxy, it can potentially work with many, many applications!
 
@@ -50,11 +50,11 @@ Click on the links for setup details.
 The following applications are known NOT to work:
 - pgAdmin (session management)
 
-# More Data
+### More Data
 
 There's some [high-traffic load test data](doc/loadtest.md) for Wordpress; it includes some napkin math for potential AWS costs.
 
-# How it Works
+## How it Works
 
 High level overview:
 
@@ -80,7 +80,7 @@ This is simply the web application, as it would have been deployed per usual. Mo
 and/or they provide their own HTTP server which would serve traffic directly to the public in a VM or container deployment. re:Web acts as a proxy to
 this HTTP server.
 
-# Future Ideas
+## Future Ideas
 
 Many! In no particular order:
 - Test and document many many more applications!
@@ -95,7 +95,7 @@ Many! In no particular order:
 
 Contributions welcome, of course! See below for "Contact".
 
-# Limitations
+## Limitations
 
 #### Session management
 
@@ -143,7 +143,7 @@ To quote an [AWS blog post](https://aws.amazon.com/de/blogs/compute/announcing-i
 "If Lambda functions in an account go idle for *consecutive weeks*, the service will reclaim the unused Hyperplane
 resources and so very infrequently invoked functions may still see longer cold-start times" (emphasis added)
 
-# Related Work
+## Related Work
 
 - [serverlessish](https://github.com/glassechidna/serverlessish), a project that is ["eerily similar"](https://twitter.com/__steele/status/1363020663615758339). It really is.
 
@@ -163,12 +163,12 @@ giving basically the same results as re:Web for this specific application. The a
 As mentioned above, the *serverlessish* implements the very same idea, in an amazingly similar way. The main differences are that it is built for the
 AWS Application Loadbalancer (instead of API Gateway) and is designed as a Lambda Extension. We have been in contact; updates soon.
 
-# Are you AWS?
+## Are you AWS?
 
 I believe the whole concept here is gold. But shoehorning it into Lambda requests and translating JSON/HTTP back and forth is hacky. This could be made into
 something beautiful, with some changes in the involved AWS Services. Let's talk!
 
-# Contact
+## Contact
 
 For bug reports, pull requests and other issues please use Github.
 
