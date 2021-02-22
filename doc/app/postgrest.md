@@ -23,6 +23,8 @@ FROM public.ecr.aws/apparentorder/reweb as reweb
 FROM postgrest/postgrest
 COPY --from=reweb /reweb /reweb
 
+ENV PGRST_DB_POOL 1
+
 ENV REWEB_APPLICATION_EXEC postgrest /etc/postgrest.conf
 ENV REWEB_APPLICATION_PORT 3000
 ENV REWEB_WAIT_CODE 200
@@ -32,6 +34,7 @@ ENTRYPOINT ["/reweb"]
 
 #### Rationale
 
+- Any single PostgREST Lambda instance will never service more than one request concurrently, therefore the default PGRST_DB_POOL (100) can be reduced to 1
 - Wait Code is necessary because PostgREST will serve HTTP/503 until the database connection has been established
 
 ## References
