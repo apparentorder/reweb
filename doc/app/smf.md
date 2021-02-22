@@ -12,6 +12,8 @@ Seems to run fine at first glance, but not tested extensively.
 To install, create an EFS Access Point (map all access to a single UID/GID). Use an EC2 instance to unpack the SMF installation).
 From there, use use `https://yourURL/install.php` to run the installation. Be sure to adjust the forum URL from `http://` to `https://` when asked.
 
+The complete setup procedure is basically the same as Wordpress, so you can refer to that [walk-through](wordpress-setup.md).
+
 # Dockerfile
 
 ```
