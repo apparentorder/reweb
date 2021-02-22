@@ -15,7 +15,7 @@ With re:Web and AWS Lambda, you can practically eliminate this waste: Resources 
 request, down to the millisecond.
 
 This can mean significant savings for any usage pattern, but of course it's especially awesome for applications that are not used around the
-clock, like Grafana, or applcations that are used in a very unpredictable and peak-prone way, like [PostgREST](https://postgrest.org/).
+clock, like Grafana, or applications that are used in a very unpredictable and peak-prone way, like [PostgREST](https://postgrest.org/).
 
 This architecture has some key benefits:
 - It's *significantly* cheaper for many workloads
