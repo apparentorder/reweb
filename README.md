@@ -90,7 +90,6 @@ Many! In no particular order:
 - Provide Terraform and/or Cloudformation packages for one-click deployment
 - Find a good way to provide secret data as environment variables (from Secrets Manager or SSM Parameter Store, but without impacting cold-start time)
 - Find ways to give more "breathing room" for background threads ([ideas](https://www.reddit.com/r/aws/comments/lnjo6z/run_classic_web_applications_on_aws_lambda_and/go2fuqb/?utm_source=reddit&utm_medium=web2x&context=3))
-- Get a proper Custom Alias for the re:Web repository in the AWS Public Container Registry -- apparently it's not that easy...
 - Your ideas...?
 
 Contributions welcome, of course! See below for "Contact".
