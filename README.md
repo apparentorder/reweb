@@ -145,12 +145,23 @@ resources and so very infrequently invoked functions may still see longer cold-s
 
 # Related Work
 
-- [Serverless WordPress on AWS Lambda](https://keita.blog/2020/06/29/wordpress-on-aws-lambda-efs-edition/) modifies Wordpress to run in Lambda,
-giving basically the same results as re:Web. The article has some additional hints regarding S3 plug-ins.
-
 - [serverlessish](https://github.com/glassechidna/serverlessish), a project that is ["eerily similar"](https://twitter.com/__steele/status/1363020663615758339). It really is.
 
+- [Serverless WordPress on AWS Lambda](https://keita.blog/2020/06/29/wordpress-on-aws-lambda-efs-edition/) modifies Wordpress to run in Lambda,
+giving basically the same results as re:Web for this specific application. The article has some additional hints regarding S3 plug-ins.
+
+- [Bref](https://github.com/brefphp/bref) "helps you deploy PHP applications to AWS and run them on AWS Lambda". It's built on the [Serverless Framework](https://www.serverless.com). ([Reddit comment](https://www.reddit.com/r/aws/comments/lnjo6z/run_classic_web_applications_on_aws_lambda_and/go1zacd/?utm_source=reddit&utm_medium=web2x&context=3))
+
+- [Amazon.Lambda.AspNetCoreServer](https://www.nuget.org/packages/Amazon.Lambda.AspNetCoreServer/) "makes it easy to run ASP.NET Core Web API applications as AWS Lambda functions" ([AWS Blog Post](https://aws.amazon.com/blogs/developer/running-serverless-asp-net-core-web-apis-with-amazon-lambda/))
+
+- [Chalice](https://github.com/aws/chalice) "is a framework for writing serverless apps in python."
+
 - "My Dream of Truly Serverless", a blog post I have yet to write
+
+#### A Tale of Two Projects
+
+As mentioned above, the *serverlessish* implements the very same idea, in an amazingly similar way. The main differences are that it is built for the
+AWS Application Loadbalancer (instead of API Gateway) and is designed as a Lambda Extension. We have been in contact; updates soon.
 
 # Are you AWS?
 
