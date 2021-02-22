@@ -42,6 +42,7 @@ for the AWS Lambda execution environment.
 
 The following applications have been tested and are known to work:
 - Wordpress ([setup reference](doc/app/wordpress.md)) ([full setup walk-through](doc/app/wordpress-setup.md))
+- SMF / Simple Machines Forum ([setup reference](doc/app/smf.md))
 - Grafana ([setup reference](doc/app/grafana.md))
 - Kibana ([setup reference](doc/app/kibana.md))
 
