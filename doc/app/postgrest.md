@@ -1,4 +1,4 @@
-# Overview
+## Overview
 
 Seems to run fine at first glance. (Only unauth'd GET tested)
 
@@ -6,7 +6,7 @@ Seems to run fine at first glance. (Only unauth'd GET tested)
 - Seems to be fine with <100 MB RAM
 - Amazingly fast!
 
-# Environment
+## Environment
 
 | Env | Value |
 | --- | --- |
@@ -14,7 +14,9 @@ Seems to run fine at first glance. (Only unauth'd GET tested)
 | PGRST_DB_SCHEMA | public |
 | PGRST_DB_ANON_ROLE | postgres |
 
-# Dockerfile
+For optional config values, see the container docs below.
+
+## Dockerfile
 ```
 FROM public.ecr.aws/apparentorder/reweb as reweb
 
@@ -31,3 +33,7 @@ ENTRYPOINT ["/reweb"]
 #### Rationale
 
 - Wait Code is necessary because PostgREST will serve HTTP/503 until the database connection has been established
+
+## References
+
+- Container overview and config: https://hub.docker.com/r/postgrest/postgrest
