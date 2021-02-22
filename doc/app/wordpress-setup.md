@@ -1,13 +1,21 @@
 # Full Setup
 
-This page will describe all the setup steps required to get a full Wordpress site up & running on re:Web.
+The fundamental steps to set up some application with re:Web in Lambda:
+- Build a custom container image, to add re:Web
+- Deploy this image to an AWS ECR repository
+- Create a Lambda function from this repository
+  - possibly connect VPC, EFS etc. as required
+- Create an API Gateway, proxying all traffic to that Lambda function
+- optionally, add a custom domain to API Gateway
+
+This page will describe all the setup steps required to get a full Wordpress site up & running on re:Web, including EFS.
 
 We will be using `wpdemo.cmdu.de` as the site name. Adjust for your name.
 
 # Prerequisites
 
 We'll assume the following things are already there:
-- VPC (possibly with a NAT Gateway or NAT instance for connectiviy, though not strictly required)
+- VPC (possibly with a NAT Gateway or NAT instance for connectivity, though not strictly required)
 - Possibly a Security Group for all this (we'll use the VPC default SG here)
 - MySQL Database (e.g. RDS or Aurora Serverless)
 - Custom domain / hosted zone in Route53 (only needed if you want the site under your own domain name)
