@@ -1,10 +1,7 @@
 # re:Web
 re:Web enables classic web applications to run on AWS Lambda.
 
-re:Web interfaces with the Lambda Runtime API. It translates Lambda payloads back into HTTP requests
-and passes them to the web application.
-
-Due to this generic mechanism, it works with *any* web application that can be load-balanced properly.
+It translates serverlessly between *any* web application and the AWS API Gateway or AWS Application Loadbalancer.
 
 ## But Why?
 Traditional web applications need to be deployed on VMs or in containers. These run continuously around the clock, which means
