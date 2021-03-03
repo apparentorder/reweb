@@ -1,16 +1,17 @@
 NAME = reweb
-REPO = public.ecr.aws/g2o8x4n0/reweb
+VERSION = latest
+REPO = public.ecr.aws/apparentorder/reweb
+TAG = $(shell date +%s)
 
 all: build deploy
 
 build:
-	go build -o reweb -tags netgo -ldflags -s
+	go build -o reweb -tags netgo -ldflags "-s -X main.Version=$(TAG)"
 
-TAG = $(shell date +%s)
 deploy:
 	docker build -t $(NAME) .
 	docker tag $(NAME) $(REPO):$(TAG)
-	docker tag $(NAME) $(REPO):latest
+	docker tag $(NAME) $(REPO):$(VERSION)
 	docker push $(REPO):$(TAG)
-	docker push $(REPO):latest
+	docker push $(REPO):$(VERSION)
 
