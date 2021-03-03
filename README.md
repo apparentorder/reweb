@@ -68,9 +68,12 @@ we don't need to embed it in any VPC, and most importantly, it charges per actua
 It is used simply as a dumb HTTP proxy and forwards all requests to Lambda. Note that it terminates TLS;
 it allows custom domain names and ACM certificates.
 
-***UPDATE*** Support for Application Loadbalancers has been added! There's several reasons where ALB might be
-preferable -- most importantly, it becomes cheaper than API Gateway at some traffic levels. When using ALB,
-make sure to select *Multi Value Headers* in the ALB Target Group attributes.
+#### Application Loadbalancers
+
+There's several scenarios where ALB might be preferable to API Gateway -- most importantly, it becomes cheaper
+than API Gateway at some traffic levels.
+
+When using ALB, make sure to select *Multi Value Headers* in the ALB Target Group attributes.
 
 #### re:Web
 
