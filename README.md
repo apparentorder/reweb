@@ -72,7 +72,8 @@ It is used simply as a dumb HTTP proxy and forwards all requests to Lambda. Note
 it allows custom domain names and ACM certificates.
 
 *** UPDATE *** Support for Application Loadbalancers has been added! There's several reasons where ALB might be
-preferable -- most importantly, it becomes cheaper than API Gateway at some traffic levels.
+preferable -- most importantly, it becomes cheaper than API Gateway at some traffic levels. When using ALB,
+make sure to select *Multi Value Headers* in the ALB Target Group attributes.
 
 #### re:Web
 
