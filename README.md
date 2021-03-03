@@ -1,7 +1,8 @@
 # re:Web
 re:Web enables classic web applications to run on AWS Lambda.
 
-re:Web interfaces with the Lambda Runtime API. It translates API Gateway requests back into HTTP requests and passes them to the web application.
+re:Web interfaces with the Lambda Runtime API. It translates Lambda payloads back into HTTP requests
+and passes them to the web application.
 
 Due to this generic mechanism, it works with *any* web application that can be load-balanced properly.
 
@@ -64,10 +65,14 @@ High level overview:
 
 #### API Gateway
 
-We abuse the API Gateway because it's simply the better Load Balancer -- it has less administrative overhead, we don't need to embed it in any
-VPC, and most importantly, it charges per actual request instead of per hour.
+We abuse the API Gateway because it's simply the better Load Balancer -- it has less administrative overhead,
+we don't need to embed it in any VPC, and most importantly, it charges per actual request instead of per hour.
 
-It is used simply as a dumb HTTP proxy and forwards all requests to Lambda. Note that it terminates TLS; it allows custom domain names and ACM certificates.
+It is used simply as a dumb HTTP proxy and forwards all requests to Lambda. Note that it terminates TLS;
+it allows custom domain names and ACM certificates.
+
+*** UPDATE *** Support for Application Loadbalancers has been added! There's several reasons where ALB might be
+preferable -- most importantly, it becomes cheaper than API Gateway at some traffic levels.
 
 #### re:Web
 
@@ -78,16 +83,16 @@ corresponding HTTP request to the web application.
 
 #### Application Server
 
-This is simply the web application, as it would have been deployed per usual. Most software images come with some web server built-in, e.g. Apache or nginx,
-and/or they provide their own HTTP server which would serve traffic directly to the public in a VM or container deployment. re:Web acts as a proxy to
-this HTTP server.
+This is simply the web application, as it would have been deployed per usual. Most software images come with some web
+server built-in, e.g. Apache or nginx, and/or they provide their own HTTP server which would serve traffic directly
+to the public in a VM or container deployment. re:Web acts as a proxy to this HTTP server.
 
 ## Future Ideas
 
 Many! In no particular order:
 - Test and document many many more applications!
 - Work around the Lambda 6 MB response limitation by dynamically offloading such responses to S3
-- Implement re:Web for AWS Application Loadbalancer (as alternative to API Gateway), because the former becomes cheaper at some level of traffic
+- :white_check_mark: Implement re:Web for AWS Application Loadbalancer (as alternative to API Gateway)
 - Provide ready-to-use images of popular applications
 - Provide Terraform and/or Cloudformation packages for one-click deployment
 - Find a good way to provide secret data as environment variables (from Secrets Manager or SSM Parameter Store, but without impacting cold-start time)
@@ -178,3 +183,4 @@ For everything else:
 - Sometimes I peek into the og-aws Slack, as "appo"
 - I'm old enough to prefer IRC -- find me in #reweb on Freenode.
 - Last resort: Try legacy message delivery to apparentorder@neveragain.de.
+
