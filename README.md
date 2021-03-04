@@ -131,7 +131,8 @@ port below 1024 needs to be reconfigured.
 
 API Gateway supports HTTPS only -- no unencrypted HTTP. This shouldn't be a problem nowadays; in fact, it's usually welcome.
 
-API Gateway's maximum timeout is 30 seconds, so any request longer than this will fail.
+API Gateway's maximum timeout is 30 seconds, so any request longer than this will fail. Note that this is not a limitation of Lambda, so this can
+be avoided by using Application Load Balancers.
 
 #### Startup Time
 
