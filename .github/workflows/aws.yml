@@ -2,6 +2,7 @@ name: Build & Deploy to Amazon ECR
 on:
   push:
     paths: 
+      - '.github/workflows/aws.yml'
       - '**.go'
       - 'Dockerfile'
 
