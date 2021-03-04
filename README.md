@@ -1,7 +1,7 @@
 # re:Web
 re:Web enables classic web applications to run on AWS Lambda.
 
-It translates serverlessly between *any* web application and the AWS API Gateway or AWS Application Loadbalancer.
+It translates serverlessly between *any* web application and the AWS API Gateway or AWS Application Load Balancer.
 
 ## But Why?
 Traditional web applications need to be deployed on VMs or in containers. These run continuously around the clock, which means
@@ -68,7 +68,7 @@ we don't need to embed it in any VPC, and most importantly, it charges per actua
 It is used simply as a dumb HTTP proxy and forwards all requests to Lambda. Note that it terminates TLS;
 it allows custom domain names and ACM certificates.
 
-#### Application Loadbalancers
+#### Application Load Balancer
 
 There's several scenarios where ALB might be preferable to API Gateway -- most importantly, it becomes cheaper
 than API Gateway at some traffic levels.
@@ -93,7 +93,7 @@ to the public in a VM or container deployment. re:Web acts as a proxy to this HT
 Many! In no particular order:
 - Test and document many many more applications!
 - Work around the Lambda 6 MB response limitation by dynamically offloading such responses to S3
-- :white_check_mark: Implement re:Web for AWS Application Loadbalancer (as alternative to API Gateway)
+- :white_check_mark: Implement re:Web for AWS Application Load Balancer (as alternative to API Gateway)
 - Provide ready-to-use images of popular applications
 - Provide Terraform and/or Cloudformation packages for one-click deployment
 - Find a good way to provide secret data as environment variables (from Secrets Manager or SSM Parameter Store, but without impacting cold-start time)
@@ -169,7 +169,7 @@ giving basically the same results as re:Web for this specific application. The a
 #### A Tale of Two Projects
 
 As mentioned above, the *serverlessish* implements the very same idea, in an amazingly similar way. The main differences are that it is built for the
-AWS Application Loadbalancer (instead of API Gateway) and is designed as a Lambda Extension. We have been in contact; updates soon.
+AWS Application Load Balancer (instead of API Gateway) and is designed as a Lambda Extension. We have been in contact; updates soon.
 
 ## Are you AWS?
 
