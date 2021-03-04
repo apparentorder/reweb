@@ -16,14 +16,16 @@ We will be using `wpdemo.cmdu.de` as the site name. Adjust for your name.
 
 We'll assume the following things are already there:
 - VPC (possibly with a NAT Gateway or NAT instance for connectivity, though not strictly required)
-- Possibly a Security Group for all this (we'll use the VPC default SG here)
+- A Security Group for all this -- we'll assume using the VPC "default" SG for all services (this works without modification)
+  - If you're *not* using the "default" SG everywhere, please make sure to allow MySQL and NFS traffic
 - MySQL Database (e.g. RDS or Aurora Serverless)
-- Custom domain / hosted zone in Route53 (only needed if you want the site under your own domain name)
+- Optional: Custom domain / hosted zone in Route53 (if you want the site under your own domain name)
 - some EC2 instance 
-  - with Docker installed
+  - with Docker installed and running
+  - with aws-cli and [efs-utils](https://docs.aws.amazon.com/efs/latest/ug/installing-amazon-efs-utils.html) installed (Amazon Linux 2 provides those out-of-the-box)
   - with access to the same VPC you'll be using
   - with an EC2 Instance Role that ...
-    - allows to use ECR (e.g. Managed Policy "AmazonEC2ContainerRegistryPowerUser")
+    - allows to use ECR and create repositories (e.g. Managed Policy "AmazonEC2ContainerRegistryFullAccess")
     - allows EFS Clients (e.g. Managed Policy "AmazonElasticFileSystemClientReadWriteAccess")
 
 # Create the EFS
