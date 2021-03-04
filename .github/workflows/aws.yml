@@ -23,14 +23,16 @@ jobs:
         aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
 
     - name: build-binary
+      env:
+        IMAGE_TAG: ${{ github.sha }}
       run: |
         go get -d
-        go build -o reweb -tags netgo -ldflags -s
+        go build -o reweb -tags netgo -ldflags "-s -X main.Version=$IMAGE_TAG"
         ls -la
         
     - name: build-image
       env:
-        ECR_REPOSITORY: public.ecr.aws/g2o8x4n0/reweb
+        ECR_REPOSITORY: public.ecr.aws/apparentorder/reweb
         IMAGE_TAG: ${{ github.sha }}
       run: |
         docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
