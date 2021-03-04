@@ -10,6 +10,7 @@ import (
 	"io/ioutil"
 	"fmt"
 	"net/http"
+	"net/url"
 	"os"
 	"strings"
 	"syscall"
@@ -151,7 +152,6 @@ func (h lambdaHandler) Invoke(ctx context.Context, payload []byte) ([]byte, erro
 
 	debug(fmt.Sprintf("REQUEST: %s %s\n", req.Method, req.URL))
 
-	var host string
 	if isALB {
 		// ALB: Payload *must* use MultiValueHeaders, because this can only be configured to
 		// to MVHeaders exclusively -- for Request AND Response -- or not at all.
@@ -169,13 +169,6 @@ func (h lambdaHandler) Invoke(ctx context.Context, payload []byte) ([]byte, erro
 			// apparently, this also applies to multi-value headers.
 			req.Header[http.CanonicalHeaderKey(h)] = v
 		}
-
-		if h, ok := albRequest.MultiValueHeaders["host"]; !ok || len(h) != 1 {
-			e := fmt.Errorf(PrefixError + "ALB payload with bad 'Host' header")
-			fmt.Println(e)
-			return nil, e
-		}
-		host = albRequest.MultiValueHeaders["host"][0]
 	} else {
 		// API Gateway: V2 payload *never* uses MultiValue{Headers,QS}, so everything
 		// is in .Headers as usual -- except for Cookies, of course.
@@ -186,12 +179,11 @@ func (h lambdaHandler) Invoke(ctx context.Context, payload []byte) ([]byte, erro
 		// set Cookie header from event.Cookies (it gets eaten by API Gateway and stored there)
 		req.Header.Set("Cookie", strings.Join(apiGwRequest.Cookies, "; "))
 
-		host = req.Header.Get("Host")
 	}
 
 	// net/http will set/overwrite Host: using the destination address (localhost!), even if
 	// it is explicitly present in req.Header. the workaround is to set request.Host instead.
-	req.Host = host
+	req.Host = req.Header.Get("Host")
 
 	debug(fmt.Sprintf("REQUEST OBJECT: %+v", req))
 
@@ -241,6 +233,62 @@ func (h lambdaHandler) Invoke(ctx context.Context, payload []byte) ([]byte, erro
 			}
 		} else {
 			responseHeaders[h] = strings.Join(v, ", ")
+		}
+	}
+
+	//
+	// any absolute redirect targeting *this* hostname, or localhost,
+	// i.e. the site we're running, might be a garbage redirect.
+	//
+	// classic example is apache redirecting to http://hostname:<internalPort>,
+	// which might be different from the protocol and/or port that is seen by any
+	// consumers "in front of" the API Gateway / ALB.
+	//
+	// if there is such a Location header, we double-check a few things and change
+	// as necessary.
+	//
+	if responseHeaders["Location"] != "" {
+		responseLocation, err := url.Parse(responseHeaders["Location"])
+		if err != nil {
+			e := fmt.Errorf(PrefixError + "url.Parse() for 'Location' response header: %v", err)
+			fmt.Println(e)
+			return nil, e
+		}
+
+		if responseLocation.Hostname() == "localhost" {
+			responseLocation.Host = fmt.Sprintf("%s:%s", req.Header.Get("Host"), responseLocation.Port())
+			debug("LocationFix: localhost -> " + responseLocation.Host)
+		}
+
+		if strings.ToLower(responseLocation.Hostname()) == strings.ToLower(req.Header.Get("Host")) {
+			hostOrig := responseLocation.Host
+
+			// 1) if the redirect is targeting the REWEB_APPLICATION_PORT, replace it
+			// with the port where the *request* went to (X-Forwarded-Port).
+			if responseLocation.Port() == ApplicationPort && ApplicationPort != req.Header.Get("X-Forwarded-Port") {
+				responseLocation.Host = fmt.Sprintf(
+					"%s:%s",
+					req.Header.Get("Host"),
+					req.Header.Get("X-Forwarded-Port"),
+				)
+				debug("LocationFix: " + hostOrig + " -> " + responseLocation.Host)
+			}
+
+			// 2) for API Gateway requests, we always fix up http to https, as http://
+			// is not supported on API Gateway.
+			if responseLocation.Scheme == "http" && !isALB {
+				responseLocation.Scheme = "https"
+				debug("LocationFix: http -> https")
+			}
+
+			// 3) for ALB requests, we fixup "http" to "https" only if the *request* was on
+			// https as well. (this is somewhat opinionated and may need to be revisited)
+			if responseLocation.Scheme == "http" && strings.ToLower(req.Header.Get("X-Forwarded-Proto")) == "https" {
+				responseLocation.Scheme = "https"
+				debug("LocationFix: http -> https")
+			}
+
+			responseHeaders["Location"] = responseLocation.String()
 		}
 	}
 
