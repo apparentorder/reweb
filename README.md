@@ -115,7 +115,7 @@ a load balancer's "sticky session" feature, this workaround will not help on Lam
 Lambda itself has several very important limitations.
 
 - Any Lambda response cannot exceed 6 MB. That means any web request resulting in a larger response will fail. Common examples are static content like huge
-images and enormous Javascript files. Sometimes using `$REWEB_FORCE_GZIP` helps, but that's not guaranteed.
+images and enormous Javascript files. Sometimes using `$REWEB_FORCE_GZIP` helps, but that's not guaranteed. (When using ALB, it's even less, see below)
 
 - The Lambda environment fully halts execution while there is no request in progress. That means there cannot be any background activity.
 This is perfectly fine when the code path is purely request based, for example with PHP. Anything with backgrounds threads, like Java or Node, may
@@ -127,12 +127,22 @@ file system is read-only (except for `/tmp` and `/mnt`). Writes to, say, `/var/r
 - Lambda does not allow root-level privileges, therefore it's not possible to use well-known ports -- any web application that comes with a default
 port below 1024 needs to be reconfigured.
 
+See also: [Lambda quotas](https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html).
+
 #### API Gateway limitations
 
-API Gateway supports HTTPS only -- no unencrypted HTTP. This shouldn't be a problem nowadays; in fact, it's usually welcome.
+- API Gateway supports HTTPS only -- no unencrypted HTTP. This shouldn't be a problem nowadays; in fact, it's usually welcome.
 
-API Gateway's maximum timeout is 30 seconds, so any request longer than this will fail. Note that this is not a limitation of Lambda, so this can
+- API Gateway's maximum timeout is 30 seconds, so any request longer than this will fail. Note that this is not a limitation of Lambda, so this can
 be avoided by using Application Load Balancers.
+
+See also: [HTTP API Quotas](https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html#http-api-quotas).
+
+#### Application Load Balancer limitations
+
+- When using ALB, the Lambda payload cannot exceed 1 MiB. This is for both the request *and* the response!
+
+See also: [Lambda functions as targets](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/lambda-functions.html) in the ALB Docs.
 
 #### Startup Time
 
