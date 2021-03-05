@@ -129,20 +129,17 @@ port below 1024 needs to be reconfigured.
 
 See also: [Lambda quotas](https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-limits.html).
 
-#### API Gateway limitations
+#### API Gateway vs. Application Load Balancer
 
-- API Gateway supports HTTPS only -- no unencrypted HTTP. This shouldn't be a problem nowadays; in fact, it's usually welcome.
+| Limit                  | API Gateway        | Application Load Balancer |
+| ---------------------- | ------------------ | ------------------------- |
+| Protocols              | HTTPS only         | HTTP and/or HTTPS |
+| Request size (uploads) | 10 MB              | 1 MB |
+| Response size          | 6 MB (from Lambda) | 1 MB |
+| Timeout                | max. 30 seconds    | 900 seconds (from Lambda) |
 
-- API Gateway's maximum timeout is 30 seconds, so any request longer than this will fail. Note that this is not a limitation of Lambda, so this can
-be avoided by using Application Load Balancers.
-
-See also: [HTTP API Quotas](https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html#http-api-quotas).
-
-#### Application Load Balancer limitations
-
-- When using ALB, the Lambda payload cannot exceed 1 MiB. This is for both the request *and* the response!
-
-See also: [Lambda functions as targets](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/lambda-functions.html) in the ALB Docs.
+- API Gateway docs: [HTTP API Quotas](https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html#http-api-quotas)
+- ALB docs: [Lambda functions as targets](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/lambda-functions.html)
 
 #### Startup Time
 
