@@ -2,6 +2,7 @@
 
 Works pretty great!
 
+- Main problem is large assets -- see below
 - Needs some MySQL for sessions etc. (Aurora Serverless works)
 - Needs EFS as the Wordpress directory needs to be shared and writable
 - EFS should map all access to UID/GID 33/33 (corresponds to `www-data` in the Wordpress image)
@@ -9,7 +10,7 @@ Works pretty great!
   - mostly works without Internet connectivity (NAT), but some Admin functions will fail and the Dashboard will load slowly
 - Lambda with 512 MB memory seemst to be fine and fast enough (usually <150 MB)
   - using 1800 MB (one full vCPU) is slightly faster but not worth it (most time is spent waiting for the database)
-- Initial Wordpress setup cannot be done from Lambda (the Wordpress image tries to un`tar` the whole thing)
+- Initial Wordpress setup cannot be done from Lambda (the Wordpress image tries to un`tar` the whole thing, which will time out)
   - Make sure the following two things are set in `wp-config.php`:
     ```
     define('WP_MEMORY_LIMIT', '450M');
@@ -19,6 +20,22 @@ Works pretty great!
         $_SERVER['HTTPS'] = 'on';
     }
     ```
+
+# Dealing with Large Assets
+
+ALB or API Gateway put some hefty size limits on uploads and downloads -- for example, using very large images
+will lead to errors.
+
+There are two plugins which help a *lot* to make WP work nicely with large assets:
+- [S3 Uploads](https://github.com/humanmade/S3-Uploads) offloads all such assets to S3, so Wordpress/re:Web don't
+  have to deal with delivery of those assets at all (therefore bypassing the size restrictions)
+- [Tuxedo Big File Uploads](https://wordpress.org/plugins/tuxedo-big-file-uploads/) replaces the Wordpress file
+  upload function to use chunked transfers instead
+  
+With both plugins installed, uploading and delivering large assets works nicely.
+
+Note that it's most likely necessary to install them manually (unzip to the WP plugin folder in EFS), because
+their installation takes longer than API Gateway's maximum timeout.
 
 # Dockerfile
 
