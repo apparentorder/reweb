@@ -183,6 +183,10 @@ AWS Application Load Balancer (instead of API Gateway) and is designed as a Lamb
 I believe the whole concept here is gold. But shoehorning it into Lambda requests and translating JSON/HTTP back and forth is hacky. This could be made into
 something beautiful, with some changes in the involved AWS Services. Let's talk!
 
+## News and Updates
+
+There is now a small [blog](https://reweb.neveragain.de) where I post news and updates.
+
 ## Contact
 
 For bug reports, pull requests and other issues please use Github.
