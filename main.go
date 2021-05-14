@@ -2,21 +2,23 @@ package main
 
 import (
 	"bytes"
-	"context"
 	"compress/gzip"
+	"context"
 	"encoding/base64"
 	"encoding/json"
+
 	//"errors"
-	"io/ioutil"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
 	"strings"
 	"syscall"
 	"time"
-	"github.com/aws/aws-lambda-go/lambda"
+
 	"github.com/aws/aws-lambda-go/events"
+	"github.com/aws/aws-lambda-go/lambda"
 )
 
 var Version string
@@ -29,7 +31,7 @@ var WaitPath string
 var Debug bool
 
 const PrefixDebug = "re:Web -- debug:  "
-const PrefixInfo  = "re:Web -- "
+const PrefixInfo = "re:Web -- "
 const PrefixError = "re:Web -- ERROR:  "
 
 func debug(s string) {
@@ -38,7 +40,7 @@ func debug(s string) {
 	}
 }
 
-type lambdaHandler struct {}
+type lambdaHandler struct{}
 
 func (h lambdaHandler) Invoke(ctx context.Context, payload []byte) ([]byte, error) {
 	var isALB = false
@@ -48,11 +50,11 @@ func (h lambdaHandler) Invoke(ctx context.Context, payload []byte) ([]byte, erro
 	var apiGwRequest events.APIGatewayV2HTTPRequest
 
 	type Event struct {
-		Body string
+		Body            string
 		IsBase64Encoded bool
-		Path string
-		Headers map[string]string
-		HTTPMethod string
+		Path            string
+		Headers         map[string]string
+		HTTPMethod      string
 	}
 	var event Event
 
@@ -63,7 +65,7 @@ func (h lambdaHandler) Invoke(ctx context.Context, payload []byte) ([]byte, erro
 
 	err = json.NewDecoder(bytes.NewReader(payload)).Decode(&apiGwRequest)
 	if err != nil {
-		e := fmt.Errorf(PrefixError + "cannot parse payload as API Gateway request: %v", err)
+		e := fmt.Errorf(PrefixError+"cannot parse payload as API Gateway request: %v", err)
 		fmt.Println(e)
 		return nil, e
 	}
@@ -71,14 +73,14 @@ func (h lambdaHandler) Invoke(ctx context.Context, payload []byte) ([]byte, erro
 	if apiGwRequest.RequestContext.APIID != "" {
 		// if an API ID is present, we can be sure it was an API Gateway request
 		isALB = false
-		debug(fmt.Sprintf("Parsed as API Gateway request"))
+		debug("Parsed as API Gateway request")
 		//debug(fmt.Sprintf("%+v", apiGwRequest))
 
 		event = Event{
-			Body: apiGwRequest.Body,
+			Body:            apiGwRequest.Body,
 			IsBase64Encoded: apiGwRequest.IsBase64Encoded,
-			Path: apiGwRequest.RequestContext.HTTP.Path,
-			HTTPMethod: apiGwRequest.RequestContext.HTTP.Method,
+			Path:            apiGwRequest.RequestContext.HTTP.Path,
+			HTTPMethod:      apiGwRequest.RequestContext.HTTP.Method,
 		}
 	} else {
 		// otherwise, we'll assume we were not invoked via API Gateway but via ALB instead.
@@ -86,18 +88,18 @@ func (h lambdaHandler) Invoke(ctx context.Context, payload []byte) ([]byte, erro
 
 		err = json.NewDecoder(bytes.NewReader(payload)).Decode(&albRequest)
 		if err != nil {
-			e := fmt.Errorf(PrefixError + "cannot parse payload as ALB  request: %v", err)
+			e := fmt.Errorf(PrefixError+"cannot parse payload as ALB  request: %v", err)
 			fmt.Println(e)
 			return nil, e
 		}
-		debug(fmt.Sprintf("Parsed as ALB request"))
+		debug("Parsed as ALB request")
 		debug(fmt.Sprintf("%+v", albRequest))
 
 		event = Event{
-			Body: albRequest.Body,
+			Body:            albRequest.Body,
 			IsBase64Encoded: albRequest.IsBase64Encoded,
-			Path: albRequest.Path,
-			HTTPMethod: albRequest.HTTPMethod,
+			Path:            albRequest.Path,
+			HTTPMethod:      albRequest.HTTPMethod,
 		}
 	}
 
@@ -107,7 +109,7 @@ func (h lambdaHandler) Invoke(ctx context.Context, payload []byte) ([]byte, erro
 	if event.IsBase64Encoded {
 		body, err = base64.StdEncoding.DecodeString(event.Body)
 		if err != nil {
-			e := fmt.Errorf(PrefixError + "cannot base64-decode request body: %v", err)
+			e := fmt.Errorf(PrefixError+"cannot base64-decode request body: %v", err)
 			fmt.Println(e)
 			return nil, e
 		}
@@ -130,7 +132,7 @@ func (h lambdaHandler) Invoke(ctx context.Context, payload []byte) ([]byte, erro
 			kv := []string{}
 			for mvqsp, v := range albRequest.MultiValueQueryStringParameters {
 				for _, s := range v {
-					kv = append(kv, mvqsp + "=" + s)
+					kv = append(kv, mvqsp+"="+s)
 				}
 			}
 			path += "?" + strings.Join(kv, "&")
@@ -140,12 +142,12 @@ func (h lambdaHandler) Invoke(ctx context.Context, payload []byte) ([]byte, erro
 
 	req, err := http.NewRequest(
 		event.HTTPMethod,
-		"http://localhost:" + ApplicationPort + path,
+		"http://localhost:"+ApplicationPort+path,
 		bytes.NewReader(body),
 	)
 
 	if err != nil {
-		e := fmt.Errorf(PrefixError + "http.NewRequest: %v", err)
+		e := fmt.Errorf(PrefixError+"http.NewRequest: %v", err)
 		fmt.Println(e)
 		return nil, e
 	}
@@ -197,7 +199,7 @@ func (h lambdaHandler) Invoke(ctx context.Context, payload []byte) ([]byte, erro
 
 	resp, err := httpClient.Do(req)
 	if err != nil {
-		e := fmt.Errorf(PrefixError + "HTTP REQUEST FAILED: %v", err)
+		e := fmt.Errorf(PrefixError+"HTTP REQUEST FAILED: %v", err)
 		fmt.Println(e)
 		return nil, e
 	}
@@ -208,7 +210,7 @@ func (h lambdaHandler) Invoke(ctx context.Context, payload []byte) ([]byte, erro
 	var respBody string
 	respBodyBytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		e := fmt.Errorf(PrefixError + "ReadAll() on response body: %v", err)
+		e := fmt.Errorf(PrefixError+"ReadAll() on response body: %v", err)
 		fmt.Println(e)
 		return nil, e
 	}
@@ -228,9 +230,7 @@ func (h lambdaHandler) Invoke(ctx context.Context, payload []byte) ([]byte, erro
 
 	for h, v := range resp.Header {
 		if h == "Set-Cookie" {
-			for _, s := range v {
-				responseCookies = append(responseCookies, s)
-			}
+			responseCookies = append(responseCookies, v...)
 		} else {
 			responseHeaders[h] = strings.Join(v, ", ")
 		}
@@ -250,7 +250,7 @@ func (h lambdaHandler) Invoke(ctx context.Context, payload []byte) ([]byte, erro
 	if responseHeaders["Location"] != "" {
 		responseLocation, err := url.Parse(responseHeaders["Location"])
 		if err != nil {
-			e := fmt.Errorf(PrefixError + "url.Parse() for 'Location' response header: %v", err)
+			e := fmt.Errorf(PrefixError+"url.Parse() for 'Location' response header: %v", err)
 			fmt.Println(e)
 			return nil, e
 		}
@@ -260,7 +260,7 @@ func (h lambdaHandler) Invoke(ctx context.Context, payload []byte) ([]byte, erro
 			debug("LocationFix: localhost -> " + responseLocation.Host)
 		}
 
-		if strings.ToLower(responseLocation.Hostname()) == strings.ToLower(req.Header.Get("Host")) {
+		if strings.EqualFold(responseLocation.Hostname(), req.Header.Get("Host")) {
 			hostOrig := responseLocation.Host
 
 			// 1) if the redirect is targeting the REWEB_APPLICATION_PORT, replace it
@@ -298,20 +298,20 @@ func (h lambdaHandler) Invoke(ctx context.Context, payload []byte) ([]byte, erro
 
 	if !isALB {
 		r := events.APIGatewayV2HTTPResponse{
-			StatusCode: resp.StatusCode,
-			Body: respBody,
+			StatusCode:      resp.StatusCode,
+			Body:            respBody,
 			IsBase64Encoded: true,
-			Headers: responseHeaders,
-			Cookies: responseCookies,
+			Headers:         responseHeaders,
+			Cookies:         responseCookies,
 		}
 		jsonResponse, _ := json.Marshal(r)
 		debug(string(jsonResponse))
 		return jsonResponse, nil
 	} else {
 		r := events.ALBTargetGroupResponse{
-			StatusCode: resp.StatusCode,
-			Body: respBody,
-			IsBase64Encoded: true,
+			StatusCode:        resp.StatusCode,
+			Body:              respBody,
+			IsBase64Encoded:   true,
 			MultiValueHeaders: map[string][]string{},
 		}
 
@@ -338,10 +338,16 @@ func main() {
 	WaitCode = os.Getenv("REWEB_WAIT_CODE")
 	Debug = (os.Getenv("REWEB_DEBUG") != "")
 
-	if WaitPath == "" { WaitPath = "/" }
+	if WaitPath == "" {
+		WaitPath = "/"
+	}
 
-	if ApplicationExec == "" { panic("Missing REWEB_APPLICATION_EXEC environment variable") }
-	if ApplicationPort == "" { panic("Missing REWEB_APPLICATION_PORT environment variable") }
+	if ApplicationExec == "" {
+		panic("Missing REWEB_APPLICATION_EXEC environment variable")
+	}
+	if ApplicationPort == "" {
+		panic("Missing REWEB_APPLICATION_PORT environment variable")
+	}
 
 	debug("Version: " + Version)
 
@@ -351,14 +357,14 @@ func main() {
 	}
 
 	exec := syscall.ProcAttr{
-		Env: os.Environ(),
+		Env:   os.Environ(),
 		Files: []uintptr{os.Stdin.Fd(), os.Stdout.Fd(), os.Stderr.Fd()},
 	}
 
 	syscall.ForkExec("/bin/sh", []string{"/bin/sh", "-c", ApplicationExec + " 2>&1"}, &exec)
 
 	tries := 0
-	for true {
+	for {
 		httpClient := &http.Client{
 			Timeout: 2 * time.Second,
 			CheckRedirect: func(req *http.Request, via []*http.Request) error {
@@ -368,22 +374,22 @@ func main() {
 
 		resp, err := httpClient.Get("http://localhost:" + ApplicationPort + WaitPath)
 		if err != nil {
-			if tries % 10 == 0 {
-				fmt.Printf(PrefixInfo + "SERVICE NOT UP: %v\n", err)
+			if tries%10 == 0 {
+				fmt.Printf(PrefixInfo+"SERVICE NOT UP: %v\n", err)
 			}
 		} else {
 			if WaitCode == "" || fmt.Sprint(resp.StatusCode) == WaitCode {
-				fmt.Printf(PrefixInfo + "SERVICE UP: %s\n", resp.Status)
+				fmt.Printf(PrefixInfo+"SERVICE UP: %s\n", resp.Status)
 				break
 			}
 
 			status := resp.Status
 			if resp.StatusCode == 302 {
-				status = fmt.Sprintf(PrefixInfo + "%s, Location: %s", resp.Status,
+				status = fmt.Sprintf(PrefixInfo+"%s, Location: %s", resp.Status,
 					resp.Header.Get("Location"))
 			}
 
-			fmt.Printf(PrefixInfo + "SERVICE UP, NOT READY: Expecting HTTP %s, got: %s\n",
+			fmt.Printf(PrefixInfo+"SERVICE UP, NOT READY: Expecting HTTP %s, got: %s\n",
 				WaitCode, status)
 		}
 
@@ -395,4 +401,3 @@ func main() {
 	lambda.StartHandler(lambdaHandler{})
 	// UNREACH
 }
-
