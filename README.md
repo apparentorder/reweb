@@ -194,6 +194,6 @@ For bug reports, pull requests and other issues please use Github.
 For everything else:
 - I'm trying to get used to Twitter as [@apparentorder](https://twitter.com/apparentorder). DMs are open.
 - Sometimes I peek into the og-aws Slack, as "appo"
-- I'm old enough to prefer IRC -- find me in #reweb on Freenode.
+- I'm old enough to prefer IRC -- find me in #reweb on Libera.Chat.
 - Last resort: Try legacy message delivery to apparentorder@neveragain.de.
 
